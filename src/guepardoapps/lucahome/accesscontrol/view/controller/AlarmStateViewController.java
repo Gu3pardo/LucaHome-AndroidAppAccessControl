@@ -1,4 +1,4 @@
-package guepardoapps.lucahome.accesscontrol.viewcontroller;
+package guepardoapps.lucahome.accesscontrol.view.controller;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -34,20 +34,16 @@ public class AlarmStateViewController {
 			if (currentState != null) {
 				switch (currentState) {
 				case ACCESS_CONTROL_ACTIVE:
-					_alarmStateIndicator.setBackgroundResource(R.drawable.circle_blue);
-					_alarmStateTextView.setText(R.string.accessControlActive);
+					setAlarmState(R.drawable.circle_blue, R.string.accessControlActive);
 					break;
 				case REQUEST_CODE:
-					_alarmStateIndicator.setBackgroundResource(R.drawable.circle_yellow);
-					_alarmStateTextView.setText(R.string.enterAccessCode);
+					setAlarmState(R.drawable.circle_yellow, R.string.enterAccessCode);
 					break;
 				case ACCESS_SUCCESSFUL:
-					_alarmStateIndicator.setBackgroundResource(R.drawable.circle_green);
-					_alarmStateTextView.setText(R.string.accessSuccessful);
+					setAlarmState(R.drawable.circle_green, R.string.accessSuccessful);
 					break;
 				case ALARM_ACTIVE:
-					_alarmStateIndicator.setBackgroundResource(R.drawable.circle_red);
-					_alarmStateTextView.setText(R.string.alarmActive);
+					setAlarmState(R.drawable.circle_red, R.string.alarmActive);
 					break;
 				case ACCESS_FAILED:
 				case NULL:
@@ -93,5 +89,10 @@ public class AlarmStateViewController {
 		_logger.Debug("onDestroy");
 		_receiverController.UnregisterReceiver(_alarmStateReceiver);
 		_isInitialized = false;
+	}
+
+	private void setAlarmState(int alarmIndicator, int alarmMessage) {
+		_alarmStateIndicator.setBackgroundResource(alarmIndicator);
+		_alarmStateTextView.setText(alarmMessage);
 	}
 }

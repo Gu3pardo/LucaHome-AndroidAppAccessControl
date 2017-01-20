@@ -1,4 +1,4 @@
-package guepardoapps.lucahome.accesscontrol.viewcontroller;
+package guepardoapps.lucahome.accesscontrol.view.controller;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,6 +13,7 @@ import android.widget.TextView;
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.Constants;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
+import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
 import guepardoapps.toolset.common.Logger;
 import guepardoapps.toolset.controller.ReceiverController;
 
@@ -30,6 +31,7 @@ public class CountdownViewController {
 
 	private Context _context;
 	private ReceiverController _receiverController;
+	private RESTServiceController _restServiceController;
 
 	private TextView _countdownTextView;
 
@@ -71,8 +73,11 @@ public class CountdownViewController {
 
 	public CountdownViewController(Context context) {
 		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+		
 		_context = context;
 		_receiverController = new ReceiverController(_context);
+		_restServiceController = new RESTServiceController(_context);
+		
 		_countDownTimer = new CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_INTERVAL) {
 			public void onTick(long millisUntilFinished) {
 				_countdownTextView.setText("" + String.format(TIME_FORMAT,
@@ -87,6 +92,7 @@ public class CountdownViewController {
 			public void onFinish() {
 				_countdownTextView.setTextColor(0xFFFF0000);
 				_countdownTextView.setText("00:00:00");
+				_restServiceController.SendRestAction(Constants.ACTION_PLAY_ALARM);
 			}
 		};
 	}
@@ -94,6 +100,7 @@ public class CountdownViewController {
 	public void onCreate() {
 		_logger.Debug("onCreate");
 		_countdownTextView = (TextView) ((Activity) _context).findViewById(R.id.countdownText);
+		_countdownTextView.setVisibility(View.GONE);
 	}
 
 	public void onPause() {

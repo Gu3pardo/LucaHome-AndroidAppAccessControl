@@ -3,6 +3,7 @@ package guepardoapps.lucahome.accesscontrol.common;
 public class Constants {
 	// DEBUGGING
 	public static final boolean DEBUGGING_ENABLED = true;
+	public static final boolean TESTING_ENABLED = true;
 	// IP ADRESS VIEW
 	public static final int IP_ADRESS_UPDATE_TIMEOUT = 4 * 60 * 60 * 1000;
 	public static final String BUNDLE_IP_ADRESS = "BUNDLE_IP_ADRESS";
@@ -16,10 +17,12 @@ public class Constants {
 	// DATA FOR RASPBERRY
 	public static final String USER_NAME = "AccessControl";
 	public static final String PASS_PHRASE = "518716";
-	public static final String[] SERVER_URLs = new String[] { /*TODO add ip addresses*/ };
+	public static final String[] SERVER_URLs = new String[] { "http://192.168.178.22", "http://192.168.178.36" };
 	public static final String ACTION_PATH = "/lib/lucahome.php?user=";
 	public static final String BUNDLE_REST_ACTION = "BUNDLE_REST_ACTION";
 	// ACTIONS FOR RASPBERRY
 	public static final String ACTION_ACTIVATE_ALARM = "activatealarm";
 	public static final String ACTION_SEND_CODE = "sendcode";
+	public static final String ACTION_PLAY_ALARM = "playAlarm";
+	public static final String ACTION_STOP_ALARM = "stopAlarm";
 }

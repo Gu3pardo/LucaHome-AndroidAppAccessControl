@@ -1,10 +1,9 @@
-package guepardoapps.lucahome.accesscontrol.viewcontroller;
+package guepardoapps.lucahome.accesscontrol.view.controller;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,7 +14,7 @@ import android.widget.TextView;
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.Constants;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
-import guepardoapps.lucahome.accesscontrol.services.RESTService;
+import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
 
 import guepardoapps.toolset.common.Logger;
 import guepardoapps.toolset.controller.ReceiverController;
@@ -26,12 +25,13 @@ public class CenterViewController {
 	private Logger _logger;
 
 	private static final int MAX_CHAR_LENGTH = 10;
-	private static final int LOGIN_TIMEOUT = 1500;
+	private static final int LOGIN__SUCCESSFUL_TIMEOUT = 1500;
 
 	private boolean _isInitialized;
 
 	private Context _context;
 	private ReceiverController _receiverController;
+	private RESTServiceController _restServiceController;
 
 	private Button _activateAlarmButton;
 
@@ -84,7 +84,7 @@ public class CenterViewController {
 					_code = "";
 					setCodeText(_code.length());
 					Handler loginSuccessfulHandler = new Handler();
-					loginSuccessfulHandler.postDelayed(_loginSuccessfulRunnable, LOGIN_TIMEOUT);
+					loginSuccessfulHandler.postDelayed(_loginSuccessfulRunnable, LOGIN__SUCCESSFUL_TIMEOUT);
 					break;
 				case ALARM_ACTIVE:
 					setVisibilities(View.GONE, View.VISIBLE, View.GONE);
@@ -111,6 +111,7 @@ public class CenterViewController {
 		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
 		_context = context;
 		_receiverController = new ReceiverController(_context);
+		_restServiceController = new RESTServiceController(_context);
 	}
 
 	public void onCreate() {
@@ -120,6 +121,7 @@ public class CenterViewController {
 		_codeTextView = (TextView) ((Activity) _context).findViewById(R.id.codeTextView);
 		_loginNotificationTextView = (TextView) ((Activity) _context).findViewById(R.id.loginNotificationTextView);
 		initializeButtons();
+		setVisibilities(View.GONE, View.GONE, View.GONE);
 	}
 
 	public void onPause() {
@@ -148,7 +150,7 @@ public class CenterViewController {
 		_activateAlarmButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				sendRestAction(Constants.ACTION_ACTIVATE_ALARM);
+				_restServiceController.SendRestAction(Constants.ACTION_ACTIVATE_ALARM);
 			}
 		});
 
@@ -235,7 +237,7 @@ public class CenterViewController {
 			@Override
 			public void onClick(View arg0) {
 				if (_code.length() > 0 && _code.length() <= MAX_CHAR_LENGTH) {
-					sendRestAction(Constants.ACTION_SEND_CODE + "&code=" + _code);
+					_restServiceController.SendRestAction(Constants.ACTION_SEND_CODE + "&code=" + _code);
 				} else {
 					_logger.Warn("Code is not valid!");
 				}
@@ -264,19 +266,5 @@ public class CenterViewController {
 		_activateAlarmButton.setVisibility(alarmButtonVisbility);
 		_alarmTextView.setVisibility(alarmTextVisbility);
 		_inputRelativeLayout.setVisibility(inputLayoutVisbility);
-	}
-
-	private void sendRestAction(String action) {
-		if (action == null) {
-			_logger.Warn("Action is null!");
-			return;
-		}
-		_logger.Debug("action: " + action);
-
-		Intent serviceIntent = new Intent(_context, RESTService.class);
-		Bundle serviceData = new Bundle();
-		serviceData.putString(Constants.BUNDLE_REST_ACTION, action);
-		serviceIntent.putExtras(serviceData);
-		_context.startService(serviceIntent);
 	}
 }

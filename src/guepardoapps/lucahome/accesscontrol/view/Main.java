@@ -11,8 +11,8 @@ import android.content.pm.ActivityInfo;
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.Constants;
 import guepardoapps.lucahome.accesscontrol.services.*;
-import guepardoapps.lucahome.accesscontrol.viewcontroller.*;
-
+import guepardoapps.lucahome.accesscontrol.test.Test;
+import guepardoapps.lucahome.accesscontrol.view.controller.*;
 import guepardoapps.toolset.common.Logger;
 
 public class Main extends YouTubeBaseActivity {
@@ -27,6 +27,8 @@ public class Main extends YouTubeBaseActivity {
 	private CenterViewController _centerViewController;
 	private CountdownViewController _countdownViewController;
 	private IpAdressViewController _ipAdressViewController;
+
+	private Test _test;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,12 @@ public class Main extends YouTubeBaseActivity {
 		_ipAdressViewController.onCreate();
 
 		startServices();
+
+		if (Constants.TESTING_ENABLED) {
+			_logger.Debug("testing is enabled!");
+			_test = new Test(_context);
+			_test.PerformTests();
+		}
 	}
 
 	@Override
