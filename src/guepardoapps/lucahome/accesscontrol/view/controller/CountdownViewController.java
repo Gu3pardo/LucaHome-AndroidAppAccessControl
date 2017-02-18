@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.TextView;
@@ -55,7 +56,7 @@ public class CountdownViewController {
 					break;
 				case REQUEST_CODE:
 					_countdownTextView.setVisibility(View.VISIBLE);
-					_countdownTextView.setTextColor(0xFFFFFFFF);
+					_countdownTextView.setTextColor(Color.WHITE);
 					_countDownTimer.start();
 					break;
 				case ACCESS_SUCCESSFUL:
@@ -64,7 +65,7 @@ public class CountdownViewController {
 					break;
 				case ALARM_ACTIVE:
 					_countdownTextView.setVisibility(View.VISIBLE);
-					_countdownTextView.setTextColor(0xFFFF0000);
+					_countdownTextView.setTextColor(Color.RED);
 					_countdownTextView.setText("00:00:00");
 					break;
 				case ACCESS_FAILED:
@@ -98,13 +99,12 @@ public class CountdownViewController {
 			}
 
 			public void onFinish() {
-				_countdownTextView.setTextColor(0xFFFF0000);
+				_countdownTextView.setTextColor(Color.RED);
 				_countdownTextView.setText("00:00:00");
 
 				String raspberryAction = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
 						+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_PLAY_ALARM.toString();
-				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
-						raspberryAction);
+				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, -1, raspberryAction);
 
 				String mediaserverAction = "ACTION:" + MediaServerAction.PLAY_ALARM.toString() + "&DATA:" + "";
 				_clientTask = new ClientTask(_context, ServerConstants.MEDIASERVER_URL,

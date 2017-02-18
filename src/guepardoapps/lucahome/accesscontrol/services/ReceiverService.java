@@ -37,8 +37,7 @@ public class ReceiverService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			String raspberryAction = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
 					+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_STOP_ALARM.toString();
-			_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
-					raspberryAction);
+			_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, -1, raspberryAction);
 
 			String mediaserverAction = "ACTION:" + MediaServerAction.STOP_ALARM.toString() + "&DATA:" + "";
 			_clientTask = new ClientTask(_context, ServerConstants.MEDIASERVER_URL, ServerConstants.MEDIASERVER_PORT);

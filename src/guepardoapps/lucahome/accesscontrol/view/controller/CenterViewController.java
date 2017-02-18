@@ -157,8 +157,7 @@ public class CenterViewController {
 			public void onClick(View arg0) {
 				String action = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
 						+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_ACTIVATE_ALARM.toString();
-				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
-						action);
+				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, -1, action);
 			}
 		});
 
@@ -248,8 +247,7 @@ public class CenterViewController {
 					String action = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
 							+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_SEND_CODE.toString() + "&code="
 							+ _code;
-					_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
-							action);
+					_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, -1, action);
 				} else {
 					_logger.Warn("Code is not valid!");
 				}

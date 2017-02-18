@@ -63,7 +63,12 @@ public class RESTService extends Service {
 		}
 		_logger.Debug("Action: " + action);
 
-		String performAction = url + ":" + port + action;
+		String performAction;
+		if (port.contains("-1")) {
+			performAction = url + action;
+		} else {
+			performAction = url + ":" + port + action;
+		}
 
 		_context = this;
 		_broadcastController = new BroadcastController(_context);

@@ -43,7 +43,7 @@ public class MainService extends Service {
 			}
 
 			if (_serverThread == null) {
-				_serverThread = new ServerThread(ServerConstants.RASPBERRY_PORT, _context);
+				_serverThread = new ServerThread(ServerConstants.LOCAL_PORT, _context);
 				_serverThread.Start();
 			}
 
