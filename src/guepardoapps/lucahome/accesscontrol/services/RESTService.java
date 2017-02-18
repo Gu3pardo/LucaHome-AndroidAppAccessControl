@@ -8,30 +8,29 @@ import java.net.URL;
 import java.net.URLConnection;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.widget.Toast;
-
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
+import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 
 import guepardoapps.toolset.common.Logger;
+import guepardoapps.toolset.controller.BroadcastController;
 
 public class RESTService extends Service {
 
 	private static final String TAG = RESTService.class.getName();
 	private Logger _logger;
 
+	private Context _context;
+	private BroadcastController _broadcastController;
+
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startid) {
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
-
-		if (Constants.SERVER_URLs.length == 0) {
-			_logger.Error("You did not enter server ips!");
-			Toast.makeText(this, "You did not enter server ips!", Toast.LENGTH_LONG).show();
-			return -1;
-		}
+		_logger = new Logger(TAG, Enables.DEBUGGING);
 
 		Bundle bundle = intent.getExtras();
 		if (bundle == null) {
@@ -40,7 +39,23 @@ public class RESTService extends Service {
 			return -1;
 		}
 
-		String action = bundle.getString(Constants.BUNDLE_REST_ACTION);
+		String url = bundle.getString(Bundles.REST_URL);
+		if (url == null) {
+			_logger.Warn("URL is null!");
+			stopSelf();
+			return -1;
+		}
+		_logger.Debug("URL: " + url);
+
+		String port = bundle.getString(Bundles.REST_PORT);
+		if (port == null) {
+			_logger.Warn("Port is null!");
+			stopSelf();
+			return -1;
+		}
+		_logger.Debug("Port: " + port);
+
+		String action = bundle.getString(Bundles.REST_ACTION);
 		if (action == null) {
 			_logger.Warn("Action is null!");
 			stopSelf();
@@ -48,15 +63,13 @@ public class RESTService extends Service {
 		}
 		_logger.Debug("Action: " + action);
 
-		String[] actions = new String[Constants.SERVER_URLs.length];
-		for (int index = 0; index < Constants.SERVER_URLs.length; index++) {
-			actions[index] = Constants.SERVER_URLs[index] + Constants.ACTION_PATH + Constants.USER_NAME + "&password="
-					+ Constants.PASS_PHRASE + "&action=" + action;
-			_logger.Debug("index " + String.valueOf(index) + ": " + actions[index]);
-		}
+		String performAction = url + ":" + port + action;
+
+		_context = this;
+		_broadcastController = new BroadcastController(_context);
 
 		RestCommunicationTask task = new RestCommunicationTask();
-		task.execute(actions);
+		task.execute(new String[] { performAction });
 
 		return 0;
 	}
@@ -97,6 +110,11 @@ public class RESTService extends Service {
 		@Override
 		protected void onPostExecute(String result) {
 			_logger.Debug(result);
+
+			if (result.contains("codeValid")) {
+				_broadcastController.SendSimpleBroadcast(Broadcasts.ENTERED_CODE_VALID);
+			}
+
 			stopSelf();
 		}
 	}

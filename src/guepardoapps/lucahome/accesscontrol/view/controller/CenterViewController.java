@@ -12,8 +12,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import guepardoapps.lucahome.accesscontrol.R;
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
+import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
+import guepardoapps.lucahome.accesscontrol.common.constants.Login;
+import guepardoapps.lucahome.accesscontrol.common.constants.ServerConstants;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
+import guepardoapps.lucahome.accesscontrol.common.enums.ServerSendAction;
 import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
 
 import guepardoapps.toolset.common.Logger;
@@ -66,7 +71,7 @@ public class CenterViewController {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			_logger.Debug("_alarmStateReceiver onReceive");
-			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Constants.BUNDLE_ALARM_STATE);
+			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Bundles.ALARM_STATE);
 			if (currentState != null) {
 				switch (currentState) {
 				case ACCESS_CONTROL_ACTIVE:
@@ -108,7 +113,7 @@ public class CenterViewController {
 	};
 
 	public CenterViewController(Context context) {
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+		_logger = new Logger(TAG, Enables.DEBUGGING);
 		_context = context;
 		_receiverController = new ReceiverController(_context);
 		_restServiceController = new RESTServiceController(_context);
@@ -131,7 +136,7 @@ public class CenterViewController {
 	public void onResume() {
 		_logger.Debug("onResume");
 		if (!_isInitialized) {
-			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Constants.BROADCAST_ALARM_STATE });
+			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Broadcasts.ALARM_STATE });
 			_isInitialized = true;
 			_logger.Debug("Initializing!");
 		} else {
@@ -150,7 +155,10 @@ public class CenterViewController {
 		_activateAlarmButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View arg0) {
-				_restServiceController.SendRestAction(Constants.ACTION_ACTIVATE_ALARM);
+				String action = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
+						+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_ACTIVATE_ALARM.toString();
+				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
+						action);
 			}
 		});
 
@@ -237,7 +245,11 @@ public class CenterViewController {
 			@Override
 			public void onClick(View arg0) {
 				if (_code.length() > 0 && _code.length() <= MAX_CHAR_LENGTH) {
-					_restServiceController.SendRestAction(Constants.ACTION_SEND_CODE + "&code=" + _code);
+					String action = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
+							+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_SEND_CODE.toString() + "&code="
+							+ _code;
+					_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
+							action);
 				} else {
 					_logger.Warn("Code is not valid!");
 				}

@@ -5,7 +5,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
+import guepardoapps.lucahome.accesscontrol.common.constants.ServerConstants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Timeouts;
 import guepardoapps.lucahome.accesscontrol.server.ServerThread;
 import guepardoapps.lucahome.accesscontrol.updater.*;
 
@@ -33,7 +35,7 @@ public class MainService extends Service {
 		if (!_isInitialized) {
 			_isInitialized = true;
 
-			_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+			_logger = new Logger(TAG, Enables.DEBUGGING);
 
 			_context = this;
 			if (_broadcastController == null) {
@@ -41,13 +43,13 @@ public class MainService extends Service {
 			}
 
 			if (_serverThread == null) {
-				_serverThread = new ServerThread(Constants.SERVERPORT, _context);
+				_serverThread = new ServerThread(ServerConstants.RASPBERRY_PORT, _context);
 				_serverThread.Start();
 			}
 
 			if (_ipAdressViewUpdater == null) {
 				_ipAdressViewUpdater = new IpAdressViewUpdater(_context);
-				_ipAdressViewUpdater.Start(Constants.IP_ADRESS_UPDATE_TIMEOUT);
+				_ipAdressViewUpdater.Start(Timeouts.IP_ADRESS_UPDATE);
 			}
 		}
 	}
@@ -75,8 +77,7 @@ public class MainService extends Service {
 			_logger.Debug("onDestroy");
 		}
 
-		_serverThread.Dispose();
-
 		_ipAdressViewUpdater.Dispose();
+		_serverThread.Dispose();
 	}
 }

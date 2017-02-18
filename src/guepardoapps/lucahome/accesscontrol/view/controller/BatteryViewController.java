@@ -10,8 +10,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import guepardoapps.lucahome.accesscontrol.R;
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
+import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
+
 import guepardoapps.toolset.common.Logger;
 import guepardoapps.toolset.controller.ReceiverController;
 
@@ -35,7 +38,7 @@ public class BatteryViewController {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			_logger.Debug("_alarmStateReceiver onReceive");
-			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Constants.BUNDLE_ALARM_STATE);
+			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Bundles.ALARM_STATE);
 			if (currentState != null) {
 				switch (currentState) {
 				case ACCESS_SUCCESSFUL:
@@ -76,7 +79,7 @@ public class BatteryViewController {
 	};
 
 	public BatteryViewController(Context context) {
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+		_logger = new Logger(TAG, Enables.DEBUGGING);
 		_context = context;
 		_receiverController = new ReceiverController(_context);
 	}
@@ -96,7 +99,7 @@ public class BatteryViewController {
 		_logger.Debug("onResume");
 		if (!_isInitialized) {
 			_logger.Debug("Initializing!");
-			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Constants.BROADCAST_ALARM_STATE });
+			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Broadcasts.ALARM_STATE });
 			_context.registerReceiver(_batteryInfoReveicer, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
 			_isInitialized = true;
 		} else {

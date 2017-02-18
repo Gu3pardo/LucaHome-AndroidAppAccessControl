@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
+import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 
 import guepardoapps.toolset.common.Logger;
 import guepardoapps.toolset.controller.BroadcastController;
@@ -45,7 +47,7 @@ public class IpAdressViewUpdater {
 	};
 
 	public IpAdressViewUpdater(Context context) {
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+		_logger = new Logger(TAG, Enables.DEBUGGING);
 		_updater = new Handler();
 		_context = context;
 		_broadcastController = new BroadcastController(_context);
@@ -58,7 +60,7 @@ public class IpAdressViewUpdater {
 		_updateTime = updateTime;
 		_logger.Debug("UpdateTime is: " + String.valueOf(_updateTime));
 		_receiverController.RegisterReceiver(_performUpdateReceiver,
-				new String[] { Constants.BROADCAST_PERFORM_UPDATE_IP_ADRESS });
+				new String[] { Broadcasts.PERFORM_UPDATE_IP_ADRESS });
 		_updateRunnable.run();
 	}
 
@@ -74,6 +76,6 @@ public class IpAdressViewUpdater {
 		String ip = _userInformationController.GetIp();
 		_logger.Debug("IP adress is: " + ip);
 
-		_broadcastController.SendStringBroadcast(Constants.BROADCAST_UPDATE_IP_ADRESS, Constants.BUNDLE_IP_ADRESS, ip);
+		_broadcastController.SendStringBroadcast(Broadcasts.UPDATE_IP_ADRESS, Bundles.IP_ADRESS, ip);
 	}
 }

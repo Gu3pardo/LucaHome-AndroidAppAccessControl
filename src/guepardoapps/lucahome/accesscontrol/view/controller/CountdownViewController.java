@@ -11,9 +11,16 @@ import android.view.View;
 import android.widget.TextView;
 
 import guepardoapps.lucahome.accesscontrol.R;
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
+import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
+import guepardoapps.lucahome.accesscontrol.common.constants.Login;
+import guepardoapps.lucahome.accesscontrol.common.constants.ServerConstants;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
+import guepardoapps.lucahome.accesscontrol.common.enums.ServerSendAction;
 import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
+import guepardoapps.mediamirror.client.ClientTask;
+import guepardoapps.mediamirror.common.enums.MediaServerAction;
 import guepardoapps.toolset.common.Logger;
 import guepardoapps.toolset.controller.ReceiverController;
 
@@ -30,6 +37,7 @@ public class CountdownViewController {
 	private boolean _isInitialized;
 
 	private Context _context;
+	private ClientTask _clientTask;
 	private ReceiverController _receiverController;
 	private RESTServiceController _restServiceController;
 
@@ -39,7 +47,7 @@ public class CountdownViewController {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			_logger.Debug("_alarmStateReceiver onReceive");
-			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Constants.BUNDLE_ALARM_STATE);
+			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Bundles.ALARM_STATE);
 			if (currentState != null) {
 				switch (currentState) {
 				case ACCESS_CONTROL_ACTIVE:
@@ -72,12 +80,12 @@ public class CountdownViewController {
 	};
 
 	public CountdownViewController(Context context) {
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
-		
+		_logger = new Logger(TAG, Enables.DEBUGGING);
+
 		_context = context;
 		_receiverController = new ReceiverController(_context);
 		_restServiceController = new RESTServiceController(_context);
-		
+
 		_countDownTimer = new CountDownTimer(COUNTDOWN_TIME, COUNTDOWN_INTERVAL) {
 			public void onTick(long millisUntilFinished) {
 				_countdownTextView.setText("" + String.format(TIME_FORMAT,
@@ -92,7 +100,17 @@ public class CountdownViewController {
 			public void onFinish() {
 				_countdownTextView.setTextColor(0xFFFF0000);
 				_countdownTextView.setText("00:00:00");
-				_restServiceController.SendRestAction(Constants.ACTION_PLAY_ALARM);
+
+				String raspberryAction = ServerConstants.RASPBERRY_ACTION_PATH + Login.USER_NAME + "&password="
+						+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_PLAY_ALARM.toString();
+				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, ServerConstants.RASPBERRY_PORT,
+						raspberryAction);
+
+				String mediaserverAction = "ACTION:" + MediaServerAction.PLAY_ALARM.toString() + "&DATA:" + "";
+				_clientTask = new ClientTask(_context, ServerConstants.MEDIASERVER_URL,
+						ServerConstants.MEDIASERVER_PORT);
+				_clientTask.SetCommunication(mediaserverAction);
+				_clientTask.execute();
 			}
 		};
 	}
@@ -110,7 +128,7 @@ public class CountdownViewController {
 	public void onResume() {
 		_logger.Debug("onResume");
 		if (!_isInitialized) {
-			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Constants.BROADCAST_ALARM_STATE });
+			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Broadcasts.ALARM_STATE });
 			_isInitialized = true;
 			_logger.Debug("Initializing!");
 		} else {

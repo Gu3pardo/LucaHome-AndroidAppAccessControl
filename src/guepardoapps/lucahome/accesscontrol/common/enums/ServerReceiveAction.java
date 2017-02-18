@@ -2,7 +2,7 @@ package guepardoapps.lucahome.accesscontrol.common.enums;
 
 import java.io.Serializable;
 
-public enum ServerAction implements Serializable {
+public enum ServerReceiveAction implements Serializable {
 
 	NULL(0, ""), 
 	REQUEST_CODE(1, "REQUEST_CODE"), 
@@ -14,7 +14,7 @@ public enum ServerAction implements Serializable {
 	private int _id;
 	private String _action;
 
-	private ServerAction(int id, String action) {
+	private ServerReceiveAction(int id, String action) {
 		_id = id;
 		_action = action;
 	}
@@ -28,8 +28,8 @@ public enum ServerAction implements Serializable {
 		return _action;
 	}
 
-	public static ServerAction GetById(int id) {
-		for (ServerAction e : values()) {
+	public static ServerReceiveAction GetById(int id) {
+		for (ServerReceiveAction e : values()) {
 			if (e._id == id) {
 				return e;
 			}
@@ -37,8 +37,8 @@ public enum ServerAction implements Serializable {
 		return null;
 	}
 
-	public static ServerAction GetByString(String action) {
-		for (ServerAction e : values()) {
+	public static ServerReceiveAction GetByString(String action) {
+		for (ServerReceiveAction e : values()) {
 			if (e._action.contains(action)) {
 				return e;
 			}

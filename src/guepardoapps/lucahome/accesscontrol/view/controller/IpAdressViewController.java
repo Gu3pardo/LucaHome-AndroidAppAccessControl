@@ -8,8 +8,11 @@ import android.view.View;
 import android.widget.TextView;
 
 import guepardoapps.lucahome.accesscontrol.R;
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
+import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
+
 import guepardoapps.toolset.common.Logger;
 import guepardoapps.toolset.controller.ReceiverController;
 
@@ -29,7 +32,7 @@ public class IpAdressViewController {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			_logger.Debug("_alarmStateReceiver onReceive");
-			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Constants.BUNDLE_ALARM_STATE);
+			AlarmState currentState = (AlarmState) intent.getSerializableExtra(Bundles.ALARM_STATE);
 			if (currentState != null) {
 				switch (currentState) {
 				case ACCESS_SUCCESSFUL:
@@ -56,7 +59,7 @@ public class IpAdressViewController {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			_logger.Debug("_updateViewReceiver onReceive");
-			String ipAddress = intent.getStringExtra(Constants.BUNDLE_IP_ADRESS);
+			String ipAddress = intent.getStringExtra(Bundles.IP_ADRESS);
 			if (ipAddress != null) {
 				_logger.Debug("ipAddress: " + ipAddress);
 				_ipAdressTextView.setText(ipAddress);
@@ -67,7 +70,7 @@ public class IpAdressViewController {
 	};
 
 	public IpAdressViewController(Context context) {
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+		_logger = new Logger(TAG, Enables.DEBUGGING);
 		_context = context;
 		_receiverController = new ReceiverController(_context);
 	}
@@ -84,9 +87,8 @@ public class IpAdressViewController {
 	public void onResume() {
 		_logger.Debug("onResume");
 		if (!_isInitialized) {
-			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Constants.BROADCAST_ALARM_STATE });
-			_receiverController.RegisterReceiver(_updateViewReceiver,
-					new String[] { Constants.BROADCAST_UPDATE_IP_ADRESS });
+			_receiverController.RegisterReceiver(_alarmStateReceiver, new String[] { Broadcasts.ALARM_STATE });
+			_receiverController.RegisterReceiver(_updateViewReceiver, new String[] { Broadcasts.UPDATE_IP_ADRESS });
 			_isInitialized = true;
 			_logger.Debug("Initializing!");
 		} else {

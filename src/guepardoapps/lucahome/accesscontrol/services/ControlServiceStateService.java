@@ -7,8 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.IBinder;
-
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import android.widget.Toast;
+import es.dmoral.toasty.Toasty;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 
 import guepardoapps.toolset.common.Logger;
 
@@ -17,11 +18,9 @@ public class ControlServiceStateService extends Service {
 	private static final String TAG = ControlServiceStateService.class.getName();
 	private Logger _logger;
 
-	private boolean _isInitialized;
-	private int _errorCount;
-
 	private Context _context;
 
+	private boolean _isInitialized;
 	private Handler _checkServicesHandler;
 
 	private Runnable _checkServices = new Runnable() {
@@ -30,17 +29,16 @@ public class ControlServiceStateService extends Service {
 
 			if (!isServiceRunning(MainService.class)) {
 				_logger.Warn("MainService not running! Restarting!");
-				_errorCount++;
-				_logger.Warn("_errorCount: " + String.valueOf(_errorCount));
-				if (_errorCount >= 5) {
-					// TODO: send warning mail to me!
-					_logger.Info("TODO: send warning mail to me!");
-				} else {
-					Intent serviceIntent = new Intent(_context, MainService.class);
-					startService(serviceIntent);
-				}
-			} else {
-				_errorCount = 0;
+				Toasty.warning(_context, "MainService not running! Restarting!", Toast.LENGTH_LONG).show();
+				Intent serviceIntent = new Intent(_context, MainService.class);
+				startService(serviceIntent);
+			}
+
+			if (!isServiceRunning(ReceiverService.class)) {
+				_logger.Warn("ReceiverService not running! Restarting!");
+				Toasty.warning(_context, "ReceiverService not running! Restarting!", Toast.LENGTH_LONG).show();
+				Intent serviceIntent = new Intent(_context, ReceiverService.class);
+				startService(serviceIntent);
 			}
 
 			_checkServicesHandler.postDelayed(_checkServices, 60 * 1000);
@@ -51,14 +49,12 @@ public class ControlServiceStateService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startid) {
 		if (!_isInitialized) {
 			if (_logger == null) {
-				_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+				_logger = new Logger(TAG, Enables.DEBUGGING);
 			}
-
-			_isInitialized = true;
-			_errorCount = 0;
 
 			_context = this;
 
+			_isInitialized = true;
 			_checkServicesHandler = new Handler();
 			_checkServices.run();
 		}

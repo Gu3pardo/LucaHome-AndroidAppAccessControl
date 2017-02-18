@@ -1,21 +1,21 @@
 package guepardoapps.lucahome.accesscontrol.view;
 
-import com.google.android.youtube.player.YouTubeBaseActivity;
-
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 
 import guepardoapps.lucahome.accesscontrol.R;
-import guepardoapps.lucahome.accesscontrol.common.Constants;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.services.*;
 import guepardoapps.lucahome.accesscontrol.test.Test;
 import guepardoapps.lucahome.accesscontrol.view.controller.*;
+
 import guepardoapps.toolset.common.Logger;
 
-public class Main extends YouTubeBaseActivity {
+public class Main extends Activity {
 
 	private static final String TAG = Main.class.getName();
 	private Logger _logger;
@@ -37,7 +37,7 @@ public class Main extends YouTubeBaseActivity {
 		setContentView(R.layout.main);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
-		_logger = new Logger(TAG, Constants.DEBUGGING_ENABLED);
+		_logger = new Logger(TAG, Enables.DEBUGGING);
 		_logger.Debug("onCreate");
 
 		_context = this;
@@ -52,7 +52,7 @@ public class Main extends YouTubeBaseActivity {
 
 		startServices();
 
-		if (Constants.TESTING_ENABLED) {
+		if (Enables.TESTING) {
 			_logger.Debug("testing is enabled!");
 			_test = new Test(_context);
 			_test.PerformTests();
