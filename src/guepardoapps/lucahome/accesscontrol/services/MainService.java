@@ -5,18 +5,18 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.BroadcastController;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.constants.ServerConstants;
 import guepardoapps.lucahome.accesscontrol.common.constants.Timeouts;
 import guepardoapps.lucahome.accesscontrol.server.ServerThread;
 import guepardoapps.lucahome.accesscontrol.updater.*;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.BroadcastController;
-
 public class MainService extends Service {
 
-	private static final String TAG = MainService.class.getName();
+	private static final String TAG = MainService.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;

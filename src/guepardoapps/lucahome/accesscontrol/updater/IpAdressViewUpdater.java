@@ -5,18 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.BroadcastController;
+import guepardoapps.library.toolset.controller.ReceiverController;
+import guepardoapps.library.toolset.controller.UserInformationController;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.BroadcastController;
-import guepardoapps.toolset.controller.ReceiverController;
-import guepardoapps.toolset.controller.UserInformationController;
-
 public class IpAdressViewUpdater {
 
-	private static final String TAG = IpAdressViewUpdater.class.getName();
+	private static final String TAG = IpAdressViewUpdater.class.getSimpleName();
 	private Logger _logger;
 
 	private Handler _updater;

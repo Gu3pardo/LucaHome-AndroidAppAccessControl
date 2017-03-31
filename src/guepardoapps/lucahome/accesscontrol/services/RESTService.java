@@ -13,16 +13,17 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
+
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.BroadcastController;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.BroadcastController;
-
 public class RESTService extends Service {
 
-	private static final String TAG = RESTService.class.getName();
+	private static final String TAG = RESTService.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;

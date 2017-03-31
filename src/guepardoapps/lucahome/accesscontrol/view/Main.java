@@ -7,17 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 
+import guepardoapps.library.toolset.common.Logger;
+
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.services.*;
 import guepardoapps.lucahome.accesscontrol.test.Test;
 import guepardoapps.lucahome.accesscontrol.view.controller.*;
 
-import guepardoapps.toolset.common.Logger;
-
 public class Main extends Activity {
 
-	private static final String TAG = Main.class.getName();
+	private static final String TAG = Main.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;

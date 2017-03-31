@@ -6,6 +6,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
+import guepardoapps.library.lucahome.common.enums.MediaMirrorSelection;
+import guepardoapps.library.lucahome.common.enums.ServerAction;
+import guepardoapps.library.lucahome.controller.MediaMirrorController;
+
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.ReceiverController;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.constants.Login;
@@ -13,20 +20,14 @@ import guepardoapps.lucahome.accesscontrol.common.constants.ServerConstants;
 import guepardoapps.lucahome.accesscontrol.common.enums.ServerSendAction;
 import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
 
-import guepardoapps.mediamirror.client.ClientTask;
-import guepardoapps.mediamirror.common.enums.MediaServerAction;
-
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.ReceiverController;
-
 public class ReceiverService extends Service {
 
-	private static final String TAG = ReceiverService.class.getName();
+	private static final String TAG = ReceiverService.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;
 
-	private ClientTask _clientTask;
+	private MediaMirrorController _mediaMirrorController;
 	private ReceiverController _receiverController;
 	private RESTServiceController _restServiceController;
 
@@ -39,10 +40,9 @@ public class ReceiverService extends Service {
 					+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_STOP_ALARM.toString();
 			_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, -1, raspberryAction);
 
-			String mediaserverAction = "ACTION:" + MediaServerAction.STOP_ALARM.toString() + "&DATA:" + "";
-			_clientTask = new ClientTask(_context, ServerConstants.MEDIASERVER_URL, ServerConstants.MEDIASERVER_PORT);
-			_clientTask.SetCommunication(mediaserverAction);
-			_clientTask.execute();
+			for (MediaMirrorSelection server : MediaMirrorSelection.values()) {
+				_mediaMirrorController.SendCommand(server.GetIp(), ServerAction.STOP_ALARM.toString(), "");
+			}
 		}
 	};
 
@@ -52,6 +52,9 @@ public class ReceiverService extends Service {
 			_logger = new Logger(TAG, Enables.DEBUGGING);
 
 			_context = this;
+
+			_mediaMirrorController = new MediaMirrorController(_context);
+			_mediaMirrorController.Initialize();
 
 			_receiverController = new ReceiverController(_context);
 			_receiverController.RegisterReceiver(_codeValidReceiver, new String[] { Broadcasts.ENTERED_CODE_VALID });
@@ -73,7 +76,11 @@ public class ReceiverService extends Service {
 
 	@Override
 	public void onDestroy() {
+		super.onDestroy();
+
+		_mediaMirrorController.Dispose();
 		_receiverController.UnregisterReceiver(_codeValidReceiver);
+
 		_isInitialized = false;
 	}
 }

@@ -11,6 +11,13 @@ import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.TextView;
 
+import guepardoapps.library.lucahome.common.enums.MediaMirrorSelection;
+import guepardoapps.library.lucahome.common.enums.ServerAction;
+import guepardoapps.library.lucahome.controller.MediaMirrorController;
+
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.ReceiverController;
+
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
@@ -20,14 +27,10 @@ import guepardoapps.lucahome.accesscontrol.common.constants.ServerConstants;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
 import guepardoapps.lucahome.accesscontrol.common.enums.ServerSendAction;
 import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
-import guepardoapps.mediamirror.client.ClientTask;
-import guepardoapps.mediamirror.common.enums.MediaServerAction;
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.ReceiverController;
 
 public class CountdownViewController {
 
-	private static final String TAG = CountdownViewController.class.getName();
+	private static final String TAG = CountdownViewController.class.getSimpleName();
 	private Logger _logger;
 
 	private static final String TIME_FORMAT = "%02d:%02d:%02d";
@@ -38,7 +41,7 @@ public class CountdownViewController {
 	private boolean _isInitialized;
 
 	private Context _context;
-	private ClientTask _clientTask;
+	private MediaMirrorController _mediaMirrorController;
 	private ReceiverController _receiverController;
 	private RESTServiceController _restServiceController;
 
@@ -84,6 +87,10 @@ public class CountdownViewController {
 		_logger = new Logger(TAG, Enables.DEBUGGING);
 
 		_context = context;
+
+		_mediaMirrorController = new MediaMirrorController(_context);
+		_mediaMirrorController.Initialize();
+
 		_receiverController = new ReceiverController(_context);
 		_restServiceController = new RESTServiceController(_context);
 
@@ -106,11 +113,9 @@ public class CountdownViewController {
 						+ Login.PASS_PHRASE + "&action=" + ServerSendAction.ACTION_PLAY_ALARM.toString();
 				_restServiceController.SendRestAction(ServerConstants.RASPBERRY_URL, -1, raspberryAction);
 
-				String mediaserverAction = "ACTION:" + MediaServerAction.PLAY_ALARM.toString() + "&DATA:" + "";
-				_clientTask = new ClientTask(_context, ServerConstants.MEDIASERVER_URL,
-						ServerConstants.MEDIASERVER_PORT);
-				_clientTask.SetCommunication(mediaserverAction);
-				_clientTask.execute();
+				for (MediaMirrorSelection server : MediaMirrorSelection.values()) {
+					_mediaMirrorController.SendCommand(server.GetIp(), ServerAction.PLAY_ALARM.toString(), "");
+				}
 			}
 		};
 	}
@@ -138,7 +143,10 @@ public class CountdownViewController {
 
 	public void onDestroy() {
 		_logger.Debug("onDestroy");
+
+		_mediaMirrorController.Dispose();
 		_receiverController.UnregisterReceiver(_alarmStateReceiver);
+
 		_isInitialized = false;
 	}
 }

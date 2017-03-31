@@ -7,18 +7,18 @@ import android.content.Intent;
 import android.view.View;
 import android.widget.TextView;
 
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.ReceiverController;
+
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.ReceiverController;
-
 public class AlarmStateViewController {
 
-	private static final String TAG = AlarmStateViewController.class.getName();
+	private static final String TAG = AlarmStateViewController.class.getSimpleName();
 	private Logger _logger;
 
 	private boolean _isInitialized;

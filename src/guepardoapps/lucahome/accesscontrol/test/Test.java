@@ -3,15 +3,15 @@ package guepardoapps.lucahome.accesscontrol.test;
 import android.content.Context;
 import android.os.Handler;
 
+import guepardoapps.library.toolset.common.Logger;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.enums.ServerReceiveAction;
 import guepardoapps.lucahome.accesscontrol.server.DataHandler;
 
-import guepardoapps.toolset.common.Logger;
-
 public class Test {
 
-	private static final String TAG = Test.class.getName();
+	private static final String TAG = Test.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;

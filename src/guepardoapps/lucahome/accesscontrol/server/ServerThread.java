@@ -10,14 +10,14 @@ import java.net.Socket;
 
 import android.content.Context;
 
-import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.NetworkController;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.NetworkController;
+import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 
 public class ServerThread {
 
-	private static final String TAG = ServerThread.class.getName();
+	private static final String TAG = ServerThread.class.getSimpleName();
 	private Logger _logger;
 
 	private int _socketServerPort;

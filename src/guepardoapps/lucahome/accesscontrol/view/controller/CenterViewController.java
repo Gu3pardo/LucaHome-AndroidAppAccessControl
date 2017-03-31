@@ -11,6 +11,9 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.ReceiverController;
+
 import guepardoapps.lucahome.accesscontrol.R;
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
@@ -21,12 +24,9 @@ import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
 import guepardoapps.lucahome.accesscontrol.common.enums.ServerSendAction;
 import guepardoapps.lucahome.accesscontrol.services.controller.RESTServiceController;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.ReceiverController;
-
 public class CenterViewController {
 
-	private static final String TAG = CenterViewController.class.getName();
+	private static final String TAG = CenterViewController.class.getSimpleName();
 	private Logger _logger;
 
 	private static final int MAX_CHAR_LENGTH = 10;

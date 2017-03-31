@@ -2,18 +2,18 @@ package guepardoapps.lucahome.accesscontrol.server;
 
 import android.content.Context;
 
+import guepardoapps.library.toolset.common.Logger;
+import guepardoapps.library.toolset.controller.BroadcastController;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.common.enums.AlarmState;
 import guepardoapps.lucahome.accesscontrol.common.enums.ServerReceiveAction;
 
-import guepardoapps.toolset.common.Logger;
-import guepardoapps.toolset.controller.BroadcastController;
-
 public class DataHandler {
 
-	private static final String TAG = DataHandler.class.getName();
+	private static final String TAG = DataHandler.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;

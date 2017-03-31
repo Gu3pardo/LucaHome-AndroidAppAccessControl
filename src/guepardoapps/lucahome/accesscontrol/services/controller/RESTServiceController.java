@@ -4,15 +4,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import guepardoapps.library.toolset.common.Logger;
+
 import guepardoapps.lucahome.accesscontrol.common.constants.Bundles;
 import guepardoapps.lucahome.accesscontrol.common.constants.Enables;
 import guepardoapps.lucahome.accesscontrol.services.RESTService;
 
-import guepardoapps.toolset.common.Logger;
-
 public class RESTServiceController {
 
-	private static final String TAG = RESTServiceController.class.getName();
+	private static final String TAG = RESTServiceController.class.getSimpleName();
 	private Logger _logger;
 
 	private Context _context;
