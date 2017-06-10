@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/LucaHomeAccessControl.iml" filepath="$PROJECT_DIR$/LucaHomeAccessControl.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../LucaHome/lib_lucahome/lib_lucahome.iml" filepath="$PROJECT_DIR$/../LucaHome/lib_lucahome/lib_lucahome.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../OpenWeather/lib_openweather/lib_openweather.iml" filepath="$PROJECT_DIR$/../OpenWeather/lib_openweather/lib_openweather.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Toolset/lib_toolset/lib_toolset.iml" filepath="$PROJECT_DIR$/../Toolset/lib_toolset/lib_toolset.iml" />
+    </modules>
+  </component>
+</project>

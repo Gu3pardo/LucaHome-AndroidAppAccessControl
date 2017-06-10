@@ -1,0 +1,35 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+
+    package="guepardoapps.lucahomeaccesscontrol">
+
+    <application
+        android:allowBackup="false"
+        android:configChanges="orientation|keyboardHidden"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:screenOrientation="portrait"
+        android:supportsRtl="true"
+        android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+        <activity android:name="guepardoapps.lucahomeaccesscontrol.view.Main">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <service
+            android:name="guepardoapps.lucahomeaccesscontrol.services.ControlServiceStateService"
+            android:enabled="true" />
+        <service
+            android:name="guepardoapps.lucahomeaccesscontrol.services.MainService"
+            android:enabled="true" />
+        <service
+            android:name="guepardoapps.lucahomeaccesscontrol.services.ReceiverService"
+            android:enabled="true" />
+        <service
+            android:name="guepardoapps.lucahomeaccesscontrol.services.RESTService"
+            android:enabled="true" />
+    </application>
+
+</manifest>
