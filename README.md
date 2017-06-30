@@ -12,11 +12,6 @@ Part of the LucaHome-Project
 
 Android client to control the access to your home.
 
-IMPORTANT:
-This library uses following libraries
-- LucaHome of repository https://github.com/Gu3pardo/LucaHome-AndroidApplication!
-- https://github.com/Gu3pardo/library_GuepardoAppsToolSet!
-
 Following server should run in your network:
 - https://github.com/Gu3pardo/LucaHome-RaspberryServer
 - https://github.com/Gu3pardo/LucaHome-MediaServer
