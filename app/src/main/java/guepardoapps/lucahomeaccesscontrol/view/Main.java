@@ -7,10 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 
-import guepardoapps.library.toolset.common.Logger;
-
 import guepardoapps.lucahomeaccesscontrol.R;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 import guepardoapps.lucahomeaccesscontrol.services.*;
 import guepardoapps.lucahomeaccesscontrol.view.controller.*;
 

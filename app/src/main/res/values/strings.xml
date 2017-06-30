@@ -8,6 +8,7 @@ An image of you was send to the flat owner.
 Police is informed!
 Leave now!</string>
     <string name="accessControlActive">Access control is active</string>
+    <string name="accessFailed">Access failed</string>
     <string name="accessSuccessful">Access successful</string>
     <string name="enterAccessCode">Enter access code</string>
     <string name="batteryText">99%</string>

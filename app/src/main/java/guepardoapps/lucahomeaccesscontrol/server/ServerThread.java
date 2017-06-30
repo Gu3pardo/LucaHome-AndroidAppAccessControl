@@ -11,8 +11,8 @@ import java.net.Socket;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import guepardoapps.library.toolset.common.Logger;
-import guepardoapps.library.toolset.controller.NetworkController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.NetworkController;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
 
@@ -34,7 +34,7 @@ public class ServerThread {
         _socketServerPort = port;
         _dataHandler = new DataHandler(context);
 
-        _logger.Debug("IpAddress: " + new NetworkController(context, null).GetIpAddress());
+        _logger.Debug("IpAddress: " + new NetworkController(context).GetIpAddress());
         _logger.Debug("SocketServerPort: " + String.valueOf(_socketServerPort));
     }
 

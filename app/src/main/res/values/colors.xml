@@ -12,4 +12,11 @@
     <color name="PrimaryText">#212121</color>
     <color name="SecondaryText">#727272</color>
     <color name="Divider">#b6b6b6</color>
+
+    <color name="DarkRed">#D32F2F</color>
+    <color name="LightRed">#F44336</color>
+    <color name="DarkGreen">#388E3C</color>
+    <color name="LightGreen">#4CAF50</color>
+    <color name="DarkYellow">#F1C30A</color>
+    <color name="LightYellow">#EBD92C</color>
 </resources>

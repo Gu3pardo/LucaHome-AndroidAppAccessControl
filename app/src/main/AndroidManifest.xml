@@ -2,6 +2,9 @@
 
     package="guepardoapps.lucahomeaccesscontrol">
 
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
     <application
         android:allowBackup="false"
         android:configChanges="orientation|keyboardHidden"
@@ -23,12 +26,6 @@
             android:enabled="true" />
         <service
             android:name="guepardoapps.lucahomeaccesscontrol.services.MainService"
-            android:enabled="true" />
-        <service
-            android:name="guepardoapps.lucahomeaccesscontrol.services.ReceiverService"
-            android:enabled="true" />
-        <service
-            android:name="guepardoapps.lucahomeaccesscontrol.services.RESTService"
             android:enabled="true" />
     </application>
 

@@ -6,25 +6,19 @@ import android.os.IBinder;
 import android.app.Service;
 import android.content.Intent;
 
-import guepardoapps.library.lucahome.common.enums.MediaServerAction;
-import guepardoapps.library.lucahome.common.enums.MediaServerSelection;
-import guepardoapps.library.lucahome.controller.MediaMirrorController;
-
-import guepardoapps.library.toolset.controller.BroadcastController;
-import guepardoapps.library.toolset.controller.ReceiverController;
-import guepardoapps.library.toolset.common.Logger;
-
-
 import guepardoapps.lucahomeaccesscontrol.common.constants.Broadcasts;
-import guepardoapps.lucahomeaccesscontrol.common.constants.Bundles;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Login;
 import guepardoapps.lucahomeaccesscontrol.common.constants.ServerConstants;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Timeouts;
-import guepardoapps.lucahomeaccesscontrol.common.enums.AlarmState;
+import guepardoapps.lucahomeaccesscontrol.common.controller.MediaMirrorController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.ReceiverController;
+import guepardoapps.lucahomeaccesscontrol.common.enums.MediaServerAction;
+import guepardoapps.lucahomeaccesscontrol.common.enums.MediaServerSelection;
 import guepardoapps.lucahomeaccesscontrol.common.enums.ServerSendAction;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 import guepardoapps.lucahomeaccesscontrol.server.ServerThread;
-import guepardoapps.lucahomeaccesscontrol.services.controller.RESTServiceController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.RESTServiceController;
 import guepardoapps.lucahomeaccesscontrol.updater.IpAddressViewUpdater;
 
 public class MainService extends Service {

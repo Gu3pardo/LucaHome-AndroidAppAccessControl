@@ -9,11 +9,12 @@ import android.widget.Toast;
 
 import es.dmoral.toasty.Toasty;
 
-import guepardoapps.library.toolset.common.Logger;
-import guepardoapps.library.toolset.controller.AndroidSystemController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.AndroidSystemController;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Timeouts;
+import guepardoapps.lucahomeaccesscontrol.view.Main;
 
 public class ControlServiceStateService extends Service {
 
@@ -24,21 +25,31 @@ public class ControlServiceStateService extends Service {
     private AndroidSystemController _androidSystemController;
 
     private boolean _isInitialized;
-    private Handler _checkMainServiceHandler = new Handler();
+    private Handler _checkApplicationHandler = new Handler();
 
-    private Runnable _checkMainService = new Runnable() {
+    private Runnable _checkApplication = new Runnable() {
         public void run() {
-            _logger.Debug("_checkMainService");
+            _logger.Debug("_checkApplication");
 
             if (!_androidSystemController.IsServiceRunning(MainService.class)) {
                 String message = String.format("%s not running! Restarting!", MainService.class.getSimpleName());
                 _logger.Warn(message);
                 Toasty.warning(_context, message, Toast.LENGTH_LONG).show();
+
                 Intent serviceIntent = new Intent(_context, MainService.class);
                 startService(serviceIntent);
             }
 
-            _checkMainServiceHandler.postDelayed(_checkMainService, Timeouts.CHECK_MAIN_SERVICE);
+            if (!_androidSystemController.IsBaseActivityRunning()) {
+                String message = String.format("%s not running! Restarting!", Main.class.getSimpleName());
+                _logger.Error(message);
+                Toasty.error(_context, message, Toast.LENGTH_LONG).show();
+
+                Intent activityIntent = new Intent(_context, Main.class);
+                startActivity(activityIntent);
+            }
+
+            _checkApplicationHandler.postDelayed(_checkApplication, Timeouts.CHECK_MAIN_SERVICE);
         }
     };
 
@@ -51,7 +62,7 @@ public class ControlServiceStateService extends Service {
             _androidSystemController = new AndroidSystemController(_context);
 
             _isInitialized = true;
-            _checkMainService.run();
+            _checkApplication.run();
         }
 
         _logger.Debug("onStartCommand");

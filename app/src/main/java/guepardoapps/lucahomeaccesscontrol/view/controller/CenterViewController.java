@@ -12,18 +12,17 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import guepardoapps.library.toolset.common.Logger;
-import guepardoapps.library.toolset.controller.ReceiverController;
-
 import guepardoapps.lucahomeaccesscontrol.R;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Bundles;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Login;
 import guepardoapps.lucahomeaccesscontrol.common.constants.ServerConstants;
+import guepardoapps.lucahomeaccesscontrol.common.controller.ReceiverController;
 import guepardoapps.lucahomeaccesscontrol.common.enums.AlarmState;
 import guepardoapps.lucahomeaccesscontrol.common.enums.ServerSendAction;
-import guepardoapps.lucahomeaccesscontrol.services.controller.RESTServiceController;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
+import guepardoapps.lucahomeaccesscontrol.common.controller.RESTServiceController;
 
 public class CenterViewController {
 
@@ -31,7 +30,7 @@ public class CenterViewController {
     private Logger _logger;
 
     private static final int MAX_CHAR_LENGTH = 10;
-    private static final int LOGIN__SUCCESSFUL_TIMEOUT = 1500;
+    private static final int LOGIN_SUCCESSFUL_TIMEOUT = 1500;
 
     private boolean _isInitialized;
 
@@ -78,7 +77,7 @@ public class CenterViewController {
                         _code = "";
                         setCodeText(_code.length());
                         Handler loginSuccessfulHandler = new Handler();
-                        loginSuccessfulHandler.postDelayed(_loginSuccessfulRunnable, LOGIN__SUCCESSFUL_TIMEOUT);
+                        loginSuccessfulHandler.postDelayed(_loginSuccessfulRunnable, LOGIN_SUCCESSFUL_TIMEOUT);
                         break;
                     case ALARM_ACTIVE:
                         setVisibilities(View.GONE, View.VISIBLE, View.GONE);
@@ -101,6 +100,20 @@ public class CenterViewController {
         }
     };
 
+    private BroadcastReceiver _codeInvalidReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            _logger.Warn("_codeInvalidReceiver onReceive");
+        }
+    };
+
+    private BroadcastReceiver _codeValidReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            _logger.Info("_codeValidReceiver onReceive");
+        }
+    };
+
     public CenterViewController(@NonNull Context context) {
         _logger = new Logger(TAG, Enables.LOGGING);
         _context = context;
@@ -110,10 +123,10 @@ public class CenterViewController {
 
     public void onCreate() {
         _logger.Debug("onCreate");
-        _alarmTextView = (TextView) ((Activity) _context).findViewById(R.id.alarmText);
-        _inputRelativeLayout = (RelativeLayout) ((Activity) _context).findViewById(R.id.buttonArrayLayout);
-        _codeTextView = (TextView) ((Activity) _context).findViewById(R.id.codeTextView);
-        _loginNotificationTextView = (TextView) ((Activity) _context).findViewById(R.id.loginNotificationTextView);
+        _alarmTextView = ((Activity) _context).findViewById(R.id.alarmText);
+        _inputRelativeLayout = ((Activity) _context).findViewById(R.id.buttonArrayLayout);
+        _codeTextView = ((Activity) _context).findViewById(R.id.codeTextView);
+        _loginNotificationTextView = ((Activity) _context).findViewById(R.id.loginNotificationTextView);
         initializeButtons();
         setVisibilities(View.GONE, View.GONE, View.GONE);
     }
@@ -126,6 +139,8 @@ public class CenterViewController {
         _logger.Debug("onResume");
         if (!_isInitialized) {
             _receiverController.RegisterReceiver(_alarmStateReceiver, new String[]{Broadcasts.ALARM_STATE});
+            _receiverController.RegisterReceiver(_codeInvalidReceiver, new String[]{Broadcasts.ENTERED_CODE_INVALID});
+            _receiverController.RegisterReceiver(_codeValidReceiver, new String[]{Broadcasts.ENTERED_CODE_VALID});
             _isInitialized = true;
             _logger.Debug("Initializing!");
         } else {
@@ -140,7 +155,7 @@ public class CenterViewController {
     }
 
     private void initializeButtons() {
-        _activateAlarmButton = (Button) ((Activity) _context).findViewById(R.id.activateAlarmButton);
+        _activateAlarmButton = ((Activity) _context).findViewById(R.id.activateAlarmButton);
         _activateAlarmButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -150,7 +165,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode0 = (Button) ((Activity) _context).findViewById(R.id.code0Button);
+        Button buttonCode0 = ((Activity) _context).findViewById(R.id.code0Button);
         buttonCode0.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -158,7 +173,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode1 = (Button) ((Activity) _context).findViewById(R.id.code1Button);
+        Button buttonCode1 = ((Activity) _context).findViewById(R.id.code1Button);
         buttonCode1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -166,7 +181,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode2 = (Button) ((Activity) _context).findViewById(R.id.code2Button);
+        Button buttonCode2 = ((Activity) _context).findViewById(R.id.code2Button);
         buttonCode2.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -174,7 +189,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode3 = (Button) ((Activity) _context).findViewById(R.id.code3Button);
+        Button buttonCode3 = ((Activity) _context).findViewById(R.id.code3Button);
         buttonCode3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -182,14 +197,14 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode4 = (Button) ((Activity) _context).findViewById(R.id.code4Button);
+        Button buttonCode4 = ((Activity) _context).findViewById(R.id.code4Button);
         buttonCode4.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 addCharToCode("4");
             }
         });
-        Button buttonCode5 = (Button) ((Activity) _context).findViewById(R.id.code5Button);
+        Button buttonCode5 = ((Activity) _context).findViewById(R.id.code5Button);
         buttonCode5.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -197,7 +212,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode6 = (Button) ((Activity) _context).findViewById(R.id.code6Button);
+        Button buttonCode6 = ((Activity) _context).findViewById(R.id.code6Button);
         buttonCode6.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -205,7 +220,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode7 = (Button) ((Activity) _context).findViewById(R.id.code7Button);
+        Button buttonCode7 = ((Activity) _context).findViewById(R.id.code7Button);
         buttonCode7.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -213,7 +228,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode8 = (Button) ((Activity) _context).findViewById(R.id.code8Button);
+        Button buttonCode8 = ((Activity) _context).findViewById(R.id.code8Button);
         buttonCode8.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -221,7 +236,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCode9 = (Button) ((Activity) _context).findViewById(R.id.code9Button);
+        Button buttonCode9 = ((Activity) _context).findViewById(R.id.code9Button);
         buttonCode9.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -229,7 +244,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCodeReset = (Button) ((Activity) _context).findViewById(R.id.codeResetButton);
+        Button buttonCodeReset = ((Activity) _context).findViewById(R.id.codeResetButton);
         buttonCodeReset.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {
@@ -238,7 +253,7 @@ public class CenterViewController {
             }
         });
 
-        Button buttonCodeOk = (Button) ((Activity) _context).findViewById(R.id.codeOkButton);
+        Button buttonCodeOk = ((Activity) _context).findViewById(R.id.codeOkButton);
         buttonCodeOk.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View arg0) {

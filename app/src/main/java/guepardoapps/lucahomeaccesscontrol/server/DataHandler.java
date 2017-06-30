@@ -3,8 +3,8 @@ package guepardoapps.lucahomeaccesscontrol.server;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import guepardoapps.library.toolset.common.Logger;
-import guepardoapps.library.toolset.controller.BroadcastController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.BroadcastController;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 
 import guepardoapps.lucahomeaccesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Bundles;

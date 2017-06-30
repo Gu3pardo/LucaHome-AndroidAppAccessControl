@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:background="@xml/button_blank"
+        android:background="@xml/button_blank_white"
         android:drawableTop="@android:drawable/ic_lock_idle_lock"
         android:text="@string/activateAlarm"
         android:textAppearance="?android:attr/textAppearanceLarge"

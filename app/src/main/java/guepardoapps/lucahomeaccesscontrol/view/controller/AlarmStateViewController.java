@@ -8,14 +8,13 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
-import guepardoapps.library.toolset.common.Logger;
-import guepardoapps.library.toolset.controller.ReceiverController;
-
 import guepardoapps.lucahomeaccesscontrol.R;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Bundles;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
+import guepardoapps.lucahomeaccesscontrol.common.controller.ReceiverController;
 import guepardoapps.lucahomeaccesscontrol.common.enums.AlarmState;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 
 public class AlarmStateViewController {
 
@@ -50,6 +49,8 @@ public class AlarmStateViewController {
                         setAlarmState(R.xml.circle_red, R.string.alarmActive);
                         break;
                     case ACCESS_FAILED:
+                        setAlarmState(R.xml.circle_red, R.string.accessFailed);
+                        break;
                     case NULL:
                     default:
                         _logger.Warn("State not supported!");
@@ -58,6 +59,22 @@ public class AlarmStateViewController {
             } else {
                 _logger.Warn("model is null!");
             }
+        }
+    };
+
+    private BroadcastReceiver _codeInvalidReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            _logger.Warn("_codeInvalidReceiver onReceive");
+            setAlarmState(R.xml.circle_red, R.string.enteredInvalidCode);
+        }
+    };
+
+    private BroadcastReceiver _codeValidReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            _logger.Info("_codeValidReceiver onReceive");
+            setAlarmState(R.xml.circle_red, R.string.codeAccepted);
         }
     };
 
@@ -71,7 +88,7 @@ public class AlarmStateViewController {
         _logger.Debug("onCreate");
 
         _alarmStateIndicator = ((Activity) _context).findViewById(R.id.alarmStateIndicator);
-        _alarmStateTextView = (TextView) ((Activity) _context).findViewById(R.id.alarmStateText);
+        _alarmStateTextView = ((Activity) _context).findViewById(R.id.alarmStateText);
     }
 
     public void onPause() {
@@ -82,6 +99,8 @@ public class AlarmStateViewController {
         _logger.Debug("onResume");
         if (!_isInitialized) {
             _receiverController.RegisterReceiver(_alarmStateReceiver, new String[]{Broadcasts.ALARM_STATE});
+            _receiverController.RegisterReceiver(_codeInvalidReceiver, new String[]{Broadcasts.ENTERED_CODE_INVALID});
+            _receiverController.RegisterReceiver(_codeValidReceiver, new String[]{Broadcasts.ENTERED_CODE_VALID});
             _isInitialized = true;
             _logger.Debug("Initializing!");
         } else {

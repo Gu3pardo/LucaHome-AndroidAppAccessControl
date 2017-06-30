@@ -6,14 +6,13 @@ import android.content.Intent;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 
-import guepardoapps.library.toolset.common.Logger;
-import guepardoapps.library.toolset.controller.BroadcastController;
-import guepardoapps.library.toolset.controller.ReceiverController;
-import guepardoapps.library.toolset.controller.UserInformationController;
-
 import guepardoapps.lucahomeaccesscontrol.common.constants.Broadcasts;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Bundles;
 import guepardoapps.lucahomeaccesscontrol.common.constants.Enables;
+import guepardoapps.lucahomeaccesscontrol.common.controller.BroadcastController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.NetworkController;
+import guepardoapps.lucahomeaccesscontrol.common.controller.ReceiverController;
+import guepardoapps.lucahomeaccesscontrol.common.tools.Logger;
 
 public class IpAddressViewUpdater {
 
@@ -24,7 +23,7 @@ public class IpAddressViewUpdater {
 
     private BroadcastController _broadcastController;
     private ReceiverController _receiverController;
-    private UserInformationController _userInformationController;
+    private NetworkController _networkController;
 
     private int _updateTime;
 
@@ -51,7 +50,7 @@ public class IpAddressViewUpdater {
         _updater = new Handler();
         _broadcastController = new BroadcastController(context);
         _receiverController = new ReceiverController(context);
-        _userInformationController = new UserInformationController(context);
+        _networkController = new NetworkController(context);
     }
 
     public void Start(int updateTime) {
@@ -71,7 +70,7 @@ public class IpAddressViewUpdater {
     private void getCurrentLocalIpAddress() {
         _logger.Debug("getCurrentLocalIpAddress");
 
-        String ip = _userInformationController.GetIp();
+        String ip = _networkController.GetIpAddress();
         _logger.Debug("IP address is: " + ip);
 
         _broadcastController.SendStringBroadcast(Broadcasts.UPDATE_IP_ADDRESS, Bundles.IP_ADDRESS, ip);
