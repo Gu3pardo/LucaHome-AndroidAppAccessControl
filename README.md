@@ -18,12 +18,4 @@ Following server should run in your network:
 
 # Screenshots
 
-![alt tag](https://github.com/GuepardoApps/LucaHome-AndroidAppAccessControl/blob/master/screenshots/img_000_loginSuccessful.png)
-___________________________________
-![alt tag](https://github.com/GuepardoApps/LucaHome-AndroidAppAccessControl/blob/master/screenshots/img_001_alarmIsActive.png)
-___________________________________
-![alt tag](https://github.com/GuepardoApps/LucaHome-AndroidAppAccessControl/blob/master/screenshots/img_002_promptForAccessPassPhrase.png)
-___________________________________
-![alt tag](https://github.com/GuepardoApps/LucaHome-AndroidAppAccessControl/blob/master/screenshots/img_003_failedEnteringAccessPassPhrase.png)
-___________________________________
-![alt tag](https://github.com/GuepardoApps/LucaHome-AndroidAppAccessControl/blob/master/screenshots/img_004_alarmIsActivated.png)
+![alt tag](https://github.com/GuepardoApps/LucaHome-AndroidAppAccessControl/blob/master/screenshots/header_001.png)
